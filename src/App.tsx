@@ -21,43 +21,39 @@ type ActiveReminder = {
   message: string;
 };
 
-const reminders: {
+type ReminderInfo = {
   id: ReminderId;
-  emoji: string;
   title: string;
   description: string;
-}[] = [
-    {
-      id: "water",
-      emoji: "💧",
-      title: "Drink Water",
-      description: "Stay hydrated throughout your day.",
-    },
-    {
-      id: "meal",
-      emoji: "🍎",
-      title: "Meal Time",
-      description: "Remember to eat your meals on time.",
-    },
-    {
-      id: "posture",
-      emoji: "🪑",
-      title: "Check Your Posture",
-      description: "Sit comfortably and keep your back straight.",
-    },
-    {
-      id: "eyes",
-      emoji: "👀",
-      title: "Eye Rest",
-      description: "Give your eyes a short break from the screen.",
-    },
-    {
-      id: "break",
-      emoji: "🌿",
-      title: "Take a Break",
-      description: "Pause your work and stretch a little.",
-    },
-  ];
+};
+
+const reminders: ReminderInfo[] = [
+  {
+    id: "water",
+    title: "Drink Water",
+    description: "Stay hydrated throughout your day.",
+  },
+  {
+    id: "meal",
+    title: "Meal Time",
+    description: "Remember to eat your meals on time.",
+  },
+  {
+    id: "posture",
+    title: "Check Your Posture",
+    description: "Sit comfortably and keep your back straight.",
+  },
+  {
+    id: "eyes",
+    title: "Eye Rest",
+    description: "Give your eyes a short break from the screen.",
+  },
+  {
+    id: "break",
+    title: "Take a Break",
+    description: "Pause your work and stretch a little.",
+  },
+];
 
 const defaultSettings: Settings = {
   water: true,
@@ -85,12 +81,7 @@ type MealTimes = typeof defaultMealTimes;
 function loadSavedValue<T>(key: string, fallback: T): T {
   try {
     const saved = localStorage.getItem(key);
-
-    if (saved === null) {
-      return fallback;
-    }
-
-    return JSON.parse(saved) as T;
+    return saved === null ? fallback : (JSON.parse(saved) as T);
   } catch {
     return fallback;
   }
@@ -121,10 +112,8 @@ function App() {
         : Notification.permission
     );
 
-  // Keep snooze timers independent for each reminder.
   const snoozeTimers = useRef<Partial<Record<ReminderId, number>>>({});
 
-  // Save preferences automatically whenever they change.
   useEffect(() => {
     try {
       localStorage.setItem("nudge-settings", JSON.stringify(settings));
@@ -149,7 +138,6 @@ function App() {
     }
   }, [mealTimes]);
 
-  // Clean up pending snooze timers when Nudge unmounts.
   useEffect(() => {
     return () => {
       Object.values(snoozeTimers.current).forEach((timer) => {
@@ -215,7 +203,6 @@ function App() {
     []
   );
 
-  // Show the in-app reminder and the Windows desktop notification.
   const showReminder = useCallback(
     (reminder: ActiveReminder) => {
       setActiveReminder(reminder);
@@ -224,7 +211,6 @@ function App() {
     [sendNotification]
   );
 
-  // Dismiss the current reminder and mark the activity completed.
   function dismissReminder() {
     if (!activeReminder) return;
 
@@ -240,8 +226,6 @@ function App() {
     setActiveReminder(null);
   }
 
-  // Snooze only this reminder for 10 minutes.
-  // Other reminder schedules remain unchanged.
   function snoozeReminder() {
     if (!activeReminder) return;
 
@@ -264,7 +248,6 @@ function App() {
     }, 10 * 60 * 1000);
   }
 
-  // Test the operating system's desktop notification.
   async function testNotification() {
     if (typeof Notification === "undefined") {
       setNotificationPermission("unsupported");
@@ -285,13 +268,12 @@ function App() {
 
     if (permission === "granted") {
       sendNotification(
-        "Nudge is working! 🌿",
+        "Nudge is working!",
         "Your desktop wellness reminders are ready."
       );
     }
   }
 
-  // Schedule recurring reminders and daily meal reminders.
   useEffect(() => {
     if (
       notificationPermission !== "granted" ||
@@ -308,19 +290,19 @@ function App() {
       { title: string; message: string }
     > = {
       water: {
-        title: "Time to drink water 💧",
+        title: "Time to drink water",
         message: "Take a moment to drink some water.",
       },
       posture: {
-        title: "Check your posture 🪑",
+        title: "Check your posture",
         message: "Sit comfortably and straighten your back.",
       },
       eyes: {
-        title: "Give your eyes a rest 👀",
+        title: "Give your eyes a rest",
         message: "Look away from your screen for a little while.",
       },
       break: {
-        title: "Time for a break 🌿",
+        title: "Time for a break",
         message: "Stand up, stretch, and relax for a moment.",
       },
     };
@@ -330,7 +312,6 @@ function App() {
 
       const minutes = Number(intervals[id]);
 
-      // Ignore invalid intervals.
       if (!Number.isFinite(minutes) || minutes <= 0) return;
 
       const timer = window.setInterval(() => {
@@ -347,9 +328,9 @@ function App() {
     });
 
     const mealLabels = {
-      breakfast: "Breakfast 🍳",
-      lunch: "Lunch 🍎",
-      dinner: "Dinner 🍽️",
+      breakfast: "Breakfast",
+      lunch: "Lunch",
+      dinner: "Dinner",
     } as const;
 
     (Object.keys(mealTimes) as (keyof MealTimes)[]).forEach((meal) => {
@@ -408,7 +389,13 @@ function App() {
         window.clearInterval(timer);
       });
     };
-  }, [notificationPermission, settings, intervals, mealTimes, showReminder]);
+  }, [
+    notificationPermission,
+    settings,
+    intervals,
+    mealTimes,
+    showReminder,
+  ]);
 
   return (
     <div className="nudge-app">
@@ -424,21 +411,21 @@ function App() {
           className={`nav-button ${activePage === "home" ? "active" : ""}`}
           onClick={() => setActivePage("home")}
         >
-          🏠 Home
+          Home
         </button>
 
         <button
           className={`nav-button ${activePage === "settings" ? "active" : ""}`}
           onClick={() => setActivePage("settings")}
         >
-          ⚙️ Settings
+          Settings
         </button>
 
         <button
           className={`nav-button ${activePage === "progress" ? "active" : ""}`}
           onClick={() => setActivePage("progress")}
         >
-          📊 Progress
+          Progress
         </button>
       </nav>
 
@@ -446,10 +433,10 @@ function App() {
         {activePage === "home" && (
           <section>
             <div className="page-heading">
-              <h2>Good day! 👋</h2>
+              <h2>Good day!</h2>
               <p>
-                Small reminders can make a big difference.
-                Take care of yourself today.
+                Small reminders can make a big difference. Take care of
+                yourself today.
               </p>
             </div>
 
@@ -470,7 +457,7 @@ function App() {
 
             {completedCount === reminders.length && (
               <p className="success-message">
-                🎉 Amazing! You've completed all your activities today.
+                Amazing! You've completed all your activities today.
               </p>
             )}
 
@@ -481,7 +468,6 @@ function App() {
 
                 return (
                   <article className="reminder-card" key={reminder.id}>
-                    <div className="reminder-emoji">{reminder.emoji}</div>
                     <h3>{reminder.title}</h3>
                     <p>{reminder.description}</p>
 
@@ -493,7 +479,7 @@ function App() {
 
                     {isCompleted ? (
                       <button className="done-button" disabled>
-                        ✓ Completed
+                        Completed
                       </button>
                     ) : (
                       <button
@@ -517,20 +503,18 @@ function App() {
         {activePage === "settings" && (
           <section>
             <div className="page-heading">
-              <h2>Settings ⚙️</h2>
+              <h2>Settings</h2>
               <p>Manage your reminders and preferred timings.</p>
             </div>
 
             <div className="setting-card notification-setting">
-              <h3>Desktop Notifications 🔔</h3>
+              <h3>Desktop Notifications</h3>
               <p>
                 Allow Nudge to show reminder notifications on your computer.
               </p>
 
               {notificationPermission === "granted" ? (
-                <p className="notification-status">
-                  ✓ Notifications enabled
-                </p>
+                <p className="notification-status">Notifications enabled</p>
               ) : notificationPermission === "denied" ? (
                 <p className="notification-status">
                   Notifications are blocked. Allow them in your computer's
@@ -541,7 +525,10 @@ function App() {
                   This environment does not support notifications.
                 </p>
               ) : (
-                <button className="done-button" onClick={enableNotifications}>
+                <button
+                  className="done-button"
+                  onClick={enableNotifications}
+                >
                   Enable Notifications
                 </button>
               )}
@@ -552,7 +539,7 @@ function App() {
                   onClick={testNotification}
                   style={{ marginTop: "12px" }}
                 >
-                  🔔 Test Notification
+                  Test Notification
                 </button>
               )}
             </div>
@@ -562,10 +549,7 @@ function App() {
                 <article className="setting-card" key={reminder.id}>
                   <div className="setting-top">
                     <div>
-                      <h3 className="setting-name">
-                        <span className="setting-emoji">{reminder.emoji}</span>
-                        {reminder.title}
-                      </h3>
+                      <h3 className="setting-name">{reminder.title}</h3>
                       <p>{reminder.description}</p>
                     </div>
 
@@ -671,7 +655,7 @@ function App() {
         {activePage === "progress" && (
           <section>
             <div className="page-heading">
-              <h2>Your Progress 📊</h2>
+              <h2>Your Progress</h2>
               <p>Check the activities you've completed today.</p>
             </div>
 
@@ -693,12 +677,10 @@ function App() {
             <div className="activity-list">
               {reminders.map((reminder) => (
                 <div className="activity-row" key={reminder.id}>
-                  <span>
-                    {reminder.emoji} {reminder.title}
-                  </span>
+                  <span>{reminder.title}</span>
                   <span>
                     {completed.includes(reminder.id)
-                      ? "✓ Completed"
+                      ? "Completed"
                       : "Not completed"}
                   </span>
                 </div>
@@ -742,7 +724,7 @@ function App() {
               textTransform: "uppercase",
             }}
           >
-            🌿 A little nudge
+            A little nudge
           </p>
 
           <h3
@@ -763,18 +745,12 @@ function App() {
               gap: "8px",
             }}
           >
-            <button
-              className="done-button"
-              onClick={dismissReminder}
-            >
-              ✓ Got it!
+            <button className="done-button" onClick={dismissReminder}>
+              Got it
             </button>
 
-            <button
-              className="secondary-button"
-              onClick={snoozeReminder}
-            >
-              Remind me in 10 min
+            <button className="secondary-button" onClick={snoozeReminder}>
+              Remind me later
             </button>
           </div>
         </div>
