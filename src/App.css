@@ -1,0 +1,227 @@
+/* Nudge - compact pastel green theme */
+
+:root {
+  --nudge-green: #a8c9a0;
+  --nudge-light-green: #eaf3e6;
+  --nudge-bg: #f6f9f3;
+  --nudge-text: #425345;
+  --nudge-muted: #748275;
+  --nudge-border: #dce7d8;
+}
+
+body {
+  background: var(--nudge-bg);
+  color: var(--nudge-text);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.header {
+  padding-top: 18px;
+  padding-bottom: 10px;
+}
+
+.header h1 {
+  font-size: 26px;
+  margin: 0 0 3px;
+  color: var(--nudge-text);
+}
+
+.header p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--nudge-muted);
+}
+
+.main {
+  padding-top: 16px;
+  padding-bottom: 24px;
+}
+
+.page-nav {
+  gap: 8px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.nav-button {
+  padding: 8px 14px;
+  font-size: 13px;
+  border-color: var(--nudge-border);
+  border-radius: 8px;
+}
+
+.nav-button.active {
+  background: var(--nudge-light-green);
+  border-color: var(--nudge-green);
+  color: var(--nudge-text);
+}
+
+.page-heading {
+  margin-bottom: 16px;
+}
+
+.page-heading h2 {
+  font-size: 21px;
+  margin: 0 0 5px;
+}
+
+.page-heading p {
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.progress-summary {
+  padding: 14px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  background: var(--nudge-light-green);
+}
+
+.progress-summary h3 {
+  font-size: 15px;
+  margin: 0 0 5px;
+}
+
+.progress-summary p {
+  font-size: 13px;
+  margin: 0 0 9px;
+}
+
+.progress-track {
+  height: 6px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: var(--nudge-green);
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.2s ease;
+}
+
+.reminder-grid {
+  gap: 12px;
+}
+
+.reminder-card {
+  padding: 16px;
+  border: 1px solid var(--nudge-border);
+  border-radius: 10px;
+}
+
+.reminder-emoji {
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.reminder-card h3 {
+  font-size: 15px;
+  margin: 0 0 5px;
+}
+
+.reminder-card p {
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0 0 10px;
+  color: var(--nudge-muted);
+}
+
+.done-button,
+.secondary-button {
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.done-button {
+  background: var(--nudge-green);
+  color: #263b2a;
+  border: none;
+}
+
+.done-button:disabled {
+  opacity: 0.8;
+}
+
+.settings-section {
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.setting-card {
+  padding: 14px;
+  border-color: var(--nudge-border);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.setting-name {
+  font-size: 14px;
+  margin: 0 0 4px;
+  gap: 7px;
+}
+
+.setting-emoji {
+  font-size: 18px;
+}
+
+.setting-card p {
+  font-size: 12px;
+  margin: 0;
+  color: var(--nudge-muted);
+}
+
+.field-label {
+  font-size: 12px;
+  gap: 5px;
+  margin-top: 12px;
+}
+
+.field-label select,
+.field-label input[type="time"] {
+  padding: 8px;
+  font-size: 13px;
+  border-color: var(--nudge-border);
+  border-radius: 7px;
+}
+
+.meal-times {
+  gap: 10px;
+}
+
+.settings-note {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--nudge-muted);
+}
+
+.activity-list {
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.activity-row {
+  padding: 12px;
+  font-size: 13px;
+  border-color: var(--nudge-border);
+  border-radius: 8px;
+}
+
+.success-message {
+  font-size: 13px;
+  margin: 10px 0;
+}
+
+@media (max-width: 600px) {
+  .main {
+    padding: 14px;
+  }
+
+  .meal-times {
+    grid-template-columns: 1fr;
+  }
+}
